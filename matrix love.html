@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Matrix LOVE Arcoíris</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: #000;
+    }
+    #matrix {
+      display: block;
+      width: 100vw;
+      height: 100vh;
+      background: #000;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="matrix"></canvas>
+  <script>
+    const canvas = document.getElementById('matrix');
+    const ctx = canvas.getContext('2d');
+    const fontSize = 26;
+    let columns, drops;
+    const love = "LOVE";
+    const heart = "♥";
+    // Solo caracteres L O V E y corazones, para que el mensaje sea claro
+    const characters = love + heart.repeat(4);
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      columns = Math.floor(canvas.width / fontSize);
+      drops = Array(columns).fill(1);
+    }
+    resize();
+    window.addEventListener('resize', resize);
+    function drawMatrix() {
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.12)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.font = fontSize + "px monospace";
+      for (let i = 0; i < columns; i++) {
+        // Alterna entre L O V E y corazones
+        const text = characters[Math.floor(Math.random() * characters.length)];
+        // Arcoíris usando hsl
+        ctx.fillStyle = `hsl(${(i * 360 / columns + drops[i] * 10) % 360}, 100%, 55%)`;
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+        if (Math.random() > 0.965) drops[i] = 0;
+        drops[i]++;
+      }
+      requestAnimationFrame(drawMatrix);
+    }
+    drawMatrix();
+  </script>
+</body>
+</html>
